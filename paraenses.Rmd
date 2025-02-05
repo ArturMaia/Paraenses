@@ -1,0 +1,153 @@
+---
+title: "Paraenses"
+author: "Artur Maia"
+date: "2024-06-14"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introdução 
+
+Buscando entender as características da população paraense, essa análise de dados demonstra aspectos do povo paraense.
+
+### Bibliotecas
+```{r message=FALSE, warning=FALSE}
+library(ggplot2)
+library(plotly)
+library(gganimate)
+library(htmlwidgets)
+library(plotrix)
+library(scales)
+library(RColorBrewer)
+library(cowplot)
+library(readxl)
+```
+
+### População paraense
+
+O estado do Pará tem *144* municípios e uma extensão territorial de *1.245.870,704 km²* e uma área urbanizada de *1.745,77 km²*. A população estimada em *8.120.131* pessoas, sendo *6,52* habitante por quilômetro quadrado segundo o censo de 2022.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+SISNAC <- read_excel("C:/ARTUR/Pará/SISNAC.xlsx")
+grafico<-SISNAC%>%
+  ggplot(aes(Ano,natalidade))+
+  labs(title="Nascido vivos no Estado do Pará",
+       subtitle = "Registro temporal: (1996 - 2022)",
+       x="Ano",
+       y="Nascidos vivos")+
+  geom_line(size=0.7,color="green")+
+  geom_point(color="green",fill="green",shape=21,size=3.5)+
+  theme_bw()
+arquivo = ggplotly(grafico)
+arquivo
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+SISM <- read_excel("C:/ARTUR/Pará/SISM.xlsx")
+grafico2<-SISM%>%
+  ggplot(aes(Ano,mortalidade))+
+  labs(title="Mortos no Estado do Pará",
+       subtitle = "Registro temporal: (1996 - 2022)",
+       x="Ano",
+       y="Mortos")+
+  geom_line(size=0.7,color="red")+
+  geom_point(color="red",fill="red",shape=21,size=3.5)+
+  theme_bw()
+arquivo2 = ggplotly(grafico2)
+arquivo2
+```
+Como visto nos gráficos acima é possível notar que a mortalidade no estado seguia uma crescente, que demonstrou um salto crescente maior durante a pandemia e só teve uma queda ao fim da mesma. Na natalidade do estado, também houve uma queda no período pós pandemia, isso demonstra uma mudança de perspectiva dos paraenses sobre ter filhos, e isso reflete na identidade da população do estado. O Brasil é um país miscigenado então para falar de identidade e cultura é necessário, falar da identidante racial do estado do Pará.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+racas <- read_excel("C:/ARTUR/Pará/racas.xlsx")
+racial<-ggplot(racas) +
+  aes(x = raca, fill = Percentual, weight = Quantidade) +
+  geom_bar(color="black") + scale_fill_viridis_c(option = "inferno", direction = 1)+ coord_flip()+
+  scale_y_continuous(labels = unit_format(unit = "Milhões", scale = 1e-6))+
+  labs(x = "Raça",y = "Registros",title = "Autodeclaração étnico-racial dos Paraenses (2022)",fill = "Registros(%):") +
+  theme_gray() +
+  theme(plot.title = element_text(size = 12L,face = "bold", hjust = 0.5), 
+        axis.title.y = element_text(size = 10L,face = "bold.italic"),axis.title.x = element_text(size = 10L,face = "bold.italic"))
+grafico = ggplotly(racial)
+grafico
+```
+
+Pela primeira vez, desde 1991, a maior parte da população do Brasil se declara parda e no resgistro também do censo 2022 a população preta também aumentou, e no estado do Pará como pode ser visto no gráfico acima é possível notar que tem em sua maioria uma população parda, isso se dá por conta de um maior debate e ensino e a cultura afro no estado.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+Matricula <- read_excel("C:/ARTUR/Pará/Matricula.xlsx",col_types = c("text", "numeric", "numeric"))
+educa<-ggplot(Matricula, aes(x=Ano, y=Matriculas, color=Nivel)) +
+  geom_line(size=1) +
+  geom_point(aes(shape = Nivel))+
+  labs(title = "Paraenses matriculados em instituições de ensino",
+       x = "Ano",
+       y = "Matriculas",
+       color = "Nível de ensino:")+
+  theme_bw()
+  matriculados = ggplotly(educa)
+  matriculados
+```
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+situacao<-c("Alfabetizados","Alfabetizados","Não alfabetizados","Não alfabetizados")
+sexo<-c("Homens","Mulheres","Homens","Mulheres")
+quantidade<-c(44.58,46.66,4.96,3.8)
+tabela<-data.frame(sexo,quantidade,situacao)
+ggplot(tabela) +
+ aes(x = situacao, fill = sexo, weight = quantidade) +
+ geom_bar(position = "dodge",color="black") +
+ scale_fill_hue(direction = -1) +
+ labs(x = "Alfabetização", y = "Quantidade(%)", title = "A alfabetização dos paraenses (2022)", 
+ caption = "Fonte: IBGE", fill = "Sexo:") +
+ theme_bw() +
+ theme(plot.title = element_text(face = "bold", 
+ hjust = 0.5), plot.caption = element_text(size = 10L, face = "bold.italic"), axis.title.y = element_text(face = "bold.italic"), 
+ axis.title.x = element_text(face = "bold.italic"))
+```
+
+O gráfico acima mostra que tanto no ensino médio e fundamental tem tido quedas de matriculas, diferente de pré-escola que teve um aumento crescente de matriculas no estado do Pará. No Pará, a política de educação busca a conformidade com o ODS 4 (Objetivo de Desenvolvimento Sustentável), por meio da Agenda 2030 da Organização das Nações Unidas (ONU), na tentativa de assegurar oportunidades iguais de aprendizagem ao todos. Isso inclui equidade de acesso ao ensino pré-escolar, primário, secundário, técnico profissionalizante e universitário. Diante disso vejamos a faixa etária populacional do estado:
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+cores<-brewer.pal(4,"Dark2") #cores do gráfico
+fase<-c("Crianças","Jovens","Adultos","Idosos") 
+porc<-c(24.5,17.7,50.6,7.2)                 
+valores=paste(fase,"\n",porc,sep="")      
+pie3D(porc,radius=0.95,labels=valores,explode=0.1,main="Faixa etária dos Paraenses(%)\n Ano(2022)",col=cores) 
+```
+
+Assim como pode ser visto no gráfico acima demonstra que a maior parte da população do estado é em sua maioria formada por pessoas adultas.A população jovem do Brasil vem diminuindo com o passar dos anos, um reflexo da queda da natalidade no País. A região Norte também vem registrando diminuição, mesma tendência verificada no Pará, porém com menos intensidade que outras regiões do Brasil.
+
+### Conclusão
+
+Com essa análise de dados é possível concluir que a população parense se caracteriza por maioria adultos *(de 25 a 64 anos)* e em sua grande maioria alfabetizados somando ao todo *(91,24%)*. Apesar de o IBGE não agrupar oficialmente, ativistas e o Estatuto da Igualdade Racial consideram negros o conjunto de pessoas pretas e pardas, sendo assim como a grande maioria da população dos paraenses é parda e houve um aumento da população preta, pode se dizer que a população paraense é em sua maioria negra *(79,7%)*. 
+
+***Observação:*** está pesquisa ainda se encontra incompleta e será atualizda futuramente.
+
+### Referências:
+
+*Estado do Pará:https://cidades.ibge.gov.br/brasil/pa/panorama*
+
+*População parda cresceu: https://agenciadenoticias.ibge.gov.br/agencia-noticias/2012-agencia-de-noticias/noticias/38719-censo-2022-pela-primeira-vez-desde-1991-a-maior-parte-da-populacao-do-brasil-se-declara-parda*
+
+*População preta cresceu:https://www.bbc.com/portuguese/articles/c4nyekzdd16o*
+
+*População negra:https://agenciabrasil.ebc.com.br/geral/noticia/2023-12/maior-presenca-de-negros-no-pais-reflete-reconhecimento-racial#*
+
+*Classificação de aixa etária de idade:https://pt.wikipedia.org/wiki/Predefinição:Faixas_etárias_do_Brasil*
+
+*Juventude no estado do Pará:https://agenciapara.com.br/noticia/53277/estudo-da-fapespa-traca-perfil-da-juventude-paraense*
+
+**Dados:**
+
+*Natalidade: https:http://tabnet.datasus.gov.br/cgi/tabcgi.exe?sinasc/cnv/nvpa.def*
+
+*Faixa etária de idade:https://sidra.ibge.gov.br/Tabela/9514#resultado*
+
+*Raça/cor:https://sidra.ibge.gov.br/Tabela/9605*
+
+*Alfabetização:https://sidra.ibge.gov.br/Tabela/9542*
+
+*Mortalidade: http://tabnet.datasus.gov.br/cgi/deftohtm.exe?sim/cnv/obt10pa.def*
+
+

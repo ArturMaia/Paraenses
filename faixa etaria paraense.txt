@@ -1,0 +1,10 @@
+  fase          quantia       percentual   arredondado
+-----------|---------------|--------------|---------------
+crianças    1.990.942      24,52%         25%
+jovens       1.434665       17,67%         18%
+adultos      4.105.490      50,56%         51%
+idosos          589.034      07,25%         07%
+TOTAL=   8.120.131    100,00%
+
+fonte estrutura: https://pt.wikipedia.org/wiki/Predefinição:Faixas_etárias_do_Brasil
+
