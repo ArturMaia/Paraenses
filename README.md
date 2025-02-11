@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://github.com/ArturMaia/Paraenses/blob/main/Bandeira_do_par%C3%A1.png" alt="Malha globo" style="width: 200px; border-radius: 10px;">
+  <img src="https://github.com/ArturMaia/Paraenses/blob/main/Bandeira_do_par%C3%A1.png" alt="PA" style="width: 200px; border-radius: 10px;">
 </p>
 
 # Análise Demográfica do Estado do Pará (1996 - 2022)
